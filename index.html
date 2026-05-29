@@ -12,6 +12,9 @@
       align-items: center;
       padding-top: 80px;
       color: #4B2066;
+      margin: 0;
+      min-height: 100vh;
+      box-sizing: border-box;
     }
     .card {
       background: #fff;
@@ -20,6 +23,7 @@
       padding: 40px 30px;
       max-width: 420px;
       text-align: center;
+      margin-bottom: 100px; /* Чтобы контент не перекрывался кнопкой на мобилках */
     }
     h1 {
       font-size: 2em;
@@ -35,9 +39,83 @@
       font-weight: 500;
       color: #5c259c;
     }
+
+    /* --- КНОПКА СНИЗУ СПРАВА --- */
+    .age-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #ff416c, #ff4b2b); /* Яркий, приметный градиент */
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-size: 0.9em;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(255, 75, 43, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+      z-index: 1000;
+    }
+    .age-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(255, 75, 43, 0.6);
+    }
+
+    /* --- ВСПЛЫВАЮЩЕЕ ОКНО (МОДАЛКА) --- */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(75, 32, 102, 0.6); /* Полупрозрачный фон в цвет темы */
+      backdrop-filter: blur(5px); /* Размытие заднего плана */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    /* Класс, который будет активировать окно через JS */
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-content {
+      background: white;
+      padding: 40px;
+      border-radius: 25px;
+      max-width: 450px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      transform: translateY(-20px);
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+    .modal-overlay.active .modal-content {
+      transform: translateY(0);
+    }
+    .modal-content h2 {
+      margin-top: 0;
+      color: #ff416c;
+    }
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 1.5em;
+      background: none;
+      border: none;
+      color: #a06ebf;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
+
   <div class="card">
     <h1>👀 Доброе утро, путешественница!</h1>
     <div class="sign">
@@ -52,5 +130,43 @@
       <i>Интересно, помнишь ли ты, где впервые проявила свои музыкальные способности?</i>
     </div>
   </div>
+
+  <button class="age-button" id="openModalBtn">🔞 ВНИМАНИЕ - Только для тех кому уже 21!</button>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <button class="close-btn" id="closeModalBtn">&times;</button>
+      <h2>🎉 С совершеннолетием (по американски)! 🥳</h2>
+      <p style="font-size: 1.1em; line-height: 1.6; color: #4B2066;">
+        От всей души поздравляю тебя с твоим 21 летием! <br>
+        Теперь тебе официально можно вообще ВСЁ. Пусть этот квест станет началом самого яркого, безумного и счастливого года в твоей жизни. <br>
+        Ты потрясающая, музыкальная (во всех смыслах), умная, красивая, милая, прикольная, смешная и просто невероятна. Сияй звёздочка! ✨
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const openBtn = document.getElementById('openModalBtn');
+    const closeBtn = document.getElementById('closeModalBtn');
+    const overlay = document.getElementById('modalOverlay');
+
+    // Открыть окно
+    openBtn.addEventListener('click', () => {
+      overlay.classList.add('active');
+    });
+
+    // Закрыть окно при клике на крестик
+    closeBtn.addEventListener('click', () => {
+      overlay.classList.remove('active');
+    });
+
+    // Закрыть окно при клике на любое место мимо текста
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        overlay.classList.remove('active');
+      }
+    });
+  </script>
+
 </body>
 </html>
